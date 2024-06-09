@@ -1,22 +1,23 @@
+# First, install the Azure OpenAI SDK package by running the command in the integrated terminal: [pip install openai==1.13.3]
+
 import os
 from dotenv import load_dotenv
 
-# Add Azure OpenAI package
+# Add Azure OpenAI Package:
+from openai import AsyncAzureOpenAI
 
-# Set to True to print the full response from OpenAI for each call
+# Set to True to print the full response from OpenAI for each call:
 printFullResponse = False
 
-def main(): 
-        
+def main():         
     try: 
-    
-        # Get configuration settings 
+        # Get Configuration Settings: 
         load_dotenv()
         azure_oai_endpoint = os.getenv("AZURE_OAI_ENDPOINT")
         azure_oai_key = os.getenv("AZURE_OAI_KEY")
         azure_oai_model = os.getenv("AZURE_OAI_MODEL")
         
-        # Configure the Azure OpenAI client
+        # Configure the Azure OpenAI Client:
 
         while True:
             print('\n1: Add comments to my function\n' +
@@ -46,20 +47,34 @@ def main():
         print(ex)
 
 def call_openai_model(prompt, model, client):
-    # Provide a basic user message, and use the prompt content as the user message
+    # Provide a basic user message, and use the prompt content as the user message:
     system_message = "You are a helpful AI assistant that helps programmers write code."
     user_message = prompt
 
-    # Format and send the request to the model
+    # Format and send the request to the model:
+    messages = [
+        {"role": "system", "content": system_message},
+        {"role": "user", "content": user_message},
+        ]
     
-    # Print the response to the console, if desired
+    # Call the Azure OpenAI model:
+    response = client.chat.completions.create(              
+        model=model,
+        messages=messages,
+        temperature=0.7,
+        max_tokens=1000
+    )
+
+    # Print the response to the console, if desired:
     if printFullResponse:
         print(response)
 
-    # Write the response to a file
+    # Write the response to a file:
     results_file = open(file="result/app.txt", mode="w", encoding="utf8")
     results_file.write(response.choices[0].message.content)
     print("\nResponse written to result/app.txt\n\n")
 
 if __name__ == '__main__': 
     main()
+
+# At the end, in the integrated terminal, enter the following command to test the application: [python code-generation.py]
