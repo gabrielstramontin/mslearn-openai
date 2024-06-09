@@ -1,0 +1,5 @@
+# OPTION 1: Add comments to the following function. Return only the commented code.
+
+# OPTION 2: Write four unit tests for the following function.
+
+# OPTION 3: Fix the code below for an app to play Go Fish with the user. Return only the corrected code.
