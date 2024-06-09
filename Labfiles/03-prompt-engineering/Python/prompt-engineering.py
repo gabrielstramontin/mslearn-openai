@@ -55,6 +55,10 @@ def call_openai_model(messages, model, client):
     print("User message: " + user_message)
 
     # Format and send the request to the model:
+    print("\nAdding grounding context from grounding.txt")
+    grounding_text = open(file="grounding.txt", encoding="utf8").read().strip()
+    user_message = grounding_text + user_message
+    
     messages = [
         {"role": "system", "content": system_message},
         {"role": "user", "content": user_message},
