@@ -1,4 +1,4 @@
-# First, install the Azure OpenAI SDK package by running the command in the integrated terminal: [ pip install openai==1.13.3]
+# First, install the Azure OpenAI SDK package by running the command in the integrated terminal: [pip install openai==1.13.3]
 
 import os
 from dotenv import load_dotenv
@@ -78,4 +78,4 @@ def main():
 if __name__ == '__main__': 
     main()
 
-# At the end, in the terminal pane, enter the following command to run and test the application: [python test-openai-model.py]
+# At the end, in the terminal panel, enter the following command to run and test the application: [python test-openai-model.py]
