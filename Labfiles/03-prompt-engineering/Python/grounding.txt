@@ -1,0 +1,1 @@
+Grounding content allows the model to provide reliable answers by providing content for the model to draw answer from.
