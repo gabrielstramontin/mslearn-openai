@@ -1,24 +1,25 @@
+# First, install the Azure OpenAI SDK package by running the command in the integrated terminal: [pip install openai==1.13.3]
+
 import os
 from dotenv import load_dotenv
 
-# Add Azure OpenAI package
+# Add Azure OpenAI Package:
+from openai import AsyncAzureOpenAI
 
-# Set to True to print the full response from OpenAI for each call
+# Set to True to print the full response from OpenAI for each call:
 printFullResponse = False
 
-def main(): 
-        
+def main():
     try: 
-    
-        # Get configuration settings 
+        # Get Configuration Settings: 
         load_dotenv()
         azure_oai_endpoint = os.getenv("AZURE_OAI_ENDPOINT")
         azure_oai_key = os.getenv("AZURE_OAI_KEY")
         azure_oai_model = os.getenv("AZURE_OAI_MODEL")
         
-        # Configure the Azure OpenAI client
-        
-
+        # Configure the Azure OpenAI Client:
+        client = AsyncAzureOpenAI(azure_endpoint = azure_oai_endpoint, api_key=azure_oai_key, api_version="2024-02-15-preview")
+            
         while True:
             print('1: Basic prompt (no prompt engineering)\n' +
                   '2: Prompt with email formatting and basic system message\n' +
@@ -44,20 +45,31 @@ def main():
         print(ex)
 
 def call_openai_model(messages, model, client):
-    # In this sample, each file contains both the system and user messages
-    # First, read them into variables, strip whitespace, then build the messages array
+    # In this sample, each file contains both the system and user messages. First, read them into variables, strip whitespace, then build the messages array:
     file = open(file=messages, encoding="utf8")
     system_message = file.readline().split(':', 1)[1].strip()
     user_message = file.readline().split(':', 1)[1].strip()
 
-    # Print the messages to the console
+    # Print the messages to the console:
     print("System message: " + system_message)
     print("User message: " + user_message)
 
-    # Format and send the request to the model
+    # Format and send the request to the model:
+    messages = [
+        {"role": "system", "content": system_message},
+        {"role": "user", "content": user_message},
+    ]
     
+    print("\nSending request to Azure OpenAI model...\n")
 
-
+    # Call the Azure OpenAI model:
+    response = await client.chat.completions.create(
+        model=model,
+        messages=messages,
+        temperature=0.7,
+        max_tokens=800     
+    )
+    
     if printFullResponse:
         print(response)
 
@@ -65,3 +77,5 @@ def call_openai_model(messages, model, client):
 
 if __name__ == '__main__': 
     main()
+        
+# At the end, in the integrated terminal, enter the following command to run the application: [python prompt-engineering.py]
