@@ -1,15 +1,16 @@
+# First, install the Azure OpenAI SDK package by running the command in the integrated terminal: [pip install openai==1.13.3]
+
 import os
 import requests
 import json
 from dotenv import load_dotenv
 
-# Add OpenAI import
+# Add OpenAI Import:
+from openai import AzureOpenAI
 
-
-def main(): 
-        
+def main():  
     try:     
-        # Get configuration settings 
+        # Get Configuration Settings: 
         load_dotenv()
         azure_oai_endpoint = os.getenv("AZURE_OAI_ENDPOINT")
         azure_oai_key = os.getenv("AZURE_OAI_KEY")
@@ -18,16 +19,16 @@ def main():
         azure_search_key = os.getenv("AZURE_SEARCH_KEY")
         azure_search_index = os.getenv("AZURE_SEARCH_INDEX")
         
-        # Initialize the Azure OpenAI client
+        # Initialize the Azure OpenAI Client:
         client = AzureOpenAI(
             base_url=f"{azure_oai_endpoint}/openai/deployments/{azure_oai_model}/extensions",
             api_key=azure_oai_key,
             api_version="2023-09-01-preview")
 
-        # Get the prompt
+        # Get the prompt:
         text = input('\nEnter a question:\n')
 
-        # Create extension config for own data
+        # Create extension config for own data:
         extension_config = dict(dataSources = [  
                 { 
                     "type": "AzureCognitiveSearch", 
@@ -39,7 +40,7 @@ def main():
                 }]
                 )
 
-        # Send request to Azure OpenAI model
+        # Send request to Azure OpenAI Model:
         print("...Sending the following request to Azure OpenAI endpoint...")
         print("Request: " + text + "\n")
 
@@ -54,10 +55,10 @@ def main():
             extra_body = extension_config
         )
 
-        # Print response
+        # Print response:
         print("Response: " + response.choices[0].message.content + "\n")
 
-        # print data context
+        # Print data context:
         print("\nContext information:\n")
         context = response.choices[0].message.context
         for context_message in context["messages"]:
@@ -66,9 +67,8 @@ def main():
         
     except Exception as ex:
         print(ex)
-
-
+            
 if __name__ == '__main__': 
     main()
 
-
+# At the end, in the integrated terminal, enter the following command to run and to test the application: [python ownData.py]
