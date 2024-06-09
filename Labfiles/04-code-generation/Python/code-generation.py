@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 
 # Add Azure OpenAI Package:
-from openai import AsyncAzureOpenAI
+from openai import AzureOpenAI
 
 # Set to True to print the full response from OpenAI for each call:
 printFullResponse = False
@@ -18,6 +18,11 @@ def main():
         azure_oai_model = os.getenv("AZURE_OAI_MODEL")
         
         # Configure the Azure OpenAI Client:
+        client = AzureOpenAI(
+            azure_endpoint = azure_oai_endpoint,
+            api_key = azure_oai_key,
+            api_version="2024-02-15-preview"  
+            )       
 
         while True:
             print('\n1: Add comments to my function\n' +
